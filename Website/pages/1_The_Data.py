@@ -148,7 +148,7 @@ if chosen == 'Cold Snap ❄️':
         .mark_line()
         .encode(
             alt.X('Timestamp', title = '', axis = alt.Axis(format = "%m/%d/%Y")),
-            alt.Y('Load', title = 'Load [MWh]', scale = alt.Scale(domain = [4000, 7000])),
+            alt.Y('Load', impute=alt.ImputeParams(value=None),title = 'Load [MWh]', scale = alt.Scale(domain = [4000, 7000])),
             color = alt.Color('cold_snap:O', title = 'Cold Snap', legend = None, scale = alt.Scale(domain = ['No', 'Yes'], range = ['#ADD8E6', '#00008B']))
         )
     )
@@ -180,7 +180,7 @@ if chosen == 'Heat Wave 🔥':
         .mark_line()
         .encode(
             alt.X('Timestamp', title = '', axis = alt.Axis(format = "%m/%d/%Y")),
-            alt.Y('Load', title = 'Load [MWh]', scale = alt.Scale(domain = [5000, 10000])),
+            alt.Y('Load', impute=alt.ImputeParams(value=None), title = 'Load [MWh]', scale = alt.Scale(domain = [5000, 10000])),
             color = alt.Color('heat_flag:O', title = 'Heat Wave', legend = None, scale = alt.Scale(domain = ['No', 'Yes'], range = ['#ADD8E6', '#00008B']))
         )
     )
@@ -291,3 +291,4 @@ st.write(
     On days where solar irradiance is high and the temperature is in the mid-50's to 60's, load is lower than if the temperature remains stable but solar is low.
     '''
 )
+
