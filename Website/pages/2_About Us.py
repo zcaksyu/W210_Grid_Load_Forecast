@@ -24,7 +24,7 @@ st.write(
 )
 
 # Project Details
-with open('./Pages/project_details.md') as file:
+with open('./pages/project_details.md') as file:
     st.write(file.read())
 
 

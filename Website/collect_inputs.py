@@ -457,15 +457,16 @@ def return_solar_data(url_type):
     # response = requests.get(url)
     # data = json.loads(response.text)    
     # df = pd.DataFrame(data['forecasts'])
-    
     df = pd.read_csv("solar_data.csv")
-
+    print(df)
     #Create Datetime Index & enforce 5 Min Freq
     df["period_end"] = pd.to_datetime(df["period_end"], utc=True).dt.tz_convert('US/Eastern')
+    df["period_end"] = df["period_end"].apply(lambda x: x + timedelta(hours=5))
     df = df[['dni',"period_end"]]
+    print(df)
     df = enforce_5min(df, 'period_end')
     df.index = [ pd.to_datetime(str(e)[:-7]) for e in df.index ]
-    
+    print(df)
 
     return df
 
@@ -534,15 +535,16 @@ def format_inputs():
     #print(temp)    print(temp_f)
     
     #Call Solar API for Solar 
-    try:    df = return_solar_data('Actual?')
-    except: df = pd.DataFrame()
-    solar = np.array(list(df[df.index.isin(t)].values))
+    #df = return_solar_data('Actual?')
+    #except: df = pd.DataFrame()
+    #solar = np.array(list(df[df.index.isin(t)].values))
     
-    try:    df = return_solar_data('Forecast')
-    except: df = pd.DataFrame()
-    solar_f = np.array(list(df[df.index.isin(t_f)].values))
+    #try:    df = return_solar_data('Forecast')
+    #except: df = pd.DataFrame()
+    #solar_f = np.array(list(df[df.index.isin(t_f)].values))
     #print(solar);    print(solar_f)
-    
+    solar =np.array([39.        ,  43.5       ,  48.        ,  52.5       , 57.        ,  61.5       ,  66.        ,  70.33333333, 74.66666667,  79.        ,  83.33333333,  87.66666667, 92.        ,  96.66666667, 101.33333333, 106.        , 110.66666667, 115.33333333])
+    solar_f=np.array([120.        , 121.        , 122.        , 123.        , 124.        , 125.        , 126.        , 119.66666667, 113.33333333, 107.        , 100.66666667,  94.33333333,  88.        ,  77.5       , 67.        ,  56.5       ,  46.        ,  35.5])
     ###########################
     #Create Time Flag & Weekend/Holiday Variables
     uw_v, ow_v,weekend_holiday = return_datetime_flags(t)
@@ -550,6 +552,7 @@ def format_inputs():
     #############
 
     input_list = np.array([load,solar.ravel(),temp,solar_f.ravel(),temp_f,uw_v,ow_v,weekend_holiday])
+    print(input_list)
     return input_list
 
 def tranform_data(input_list):
